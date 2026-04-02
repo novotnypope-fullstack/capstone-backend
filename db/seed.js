@@ -1,12 +1,11 @@
 import pg from "pg";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const { Pool } = pg;
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const options = { connectionString: process.env.DATABASE_URL };
+if (process.env.NODE_ENV === "production") {
+  options.ssl = { rejectUnauthorized: false };
+}
+const pool = new Pool(options);
 
 const seedDatabase = async () => {
   try {
